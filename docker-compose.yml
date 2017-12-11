@@ -1,0 +1,26 @@
+version: "2"
+
+services:
+  web:
+    image: eolant/php7.0-fpm:0.1
+    ports:
+      - "80:80"
+    volumes:
+      - ./config/apache/apache2.conf:/etc/apache2/apache2.conf
+      - /private/var/www:/var/www/
+      - ./config/apache/apache-vhosts.conf:/etc/apache2/sites-enabled/000-default.conf
+      - ./config/hosts:/etc/hosts
+      - ./config/php/php.conf:/etc/php/7.0/fpm/php.ini
+    links:
+      - db
+    restart: always
+    tty: true
+  db:
+    image: mariadb
+    restart: always
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "8889:3306"
