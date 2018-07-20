@@ -13,7 +13,7 @@ $ docker-compose up -d
 
 You can also modify Dockerfile and rebuild the image with your tag:
 ```bash
-$ docker build -t eolant/php7-fpm:0.1 .
+$ docker build -t eolant/php7-fpm:0.2 .
 ```
 
 Direct database connection:
