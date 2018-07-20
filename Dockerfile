@@ -4,27 +4,29 @@ MAINTAINER Vitaly Kasymov <info@eolant.me>
 # Environments vars
 ENV TERM=xterm
 
-RUN apt-get update
+RUN apt-get update --fix-missing
 RUN apt-get -y upgrade
 
+RUN apt-get -y install software-properties-common python-software-properties
+
+RUN LC_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php
+RUN apt-get update --fix-missing
+
 # Packages installation
-RUN DEBIAN_FRONTEND=noninteractive apt-get -y --fix-missing install apache2 \
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y --fix-missing --allow-unauthenticated install apache2 \
       libapache2-mod-fastcgi \
-      php7.0-fpm \
-      php7.0 \
-      php7.0-mysql \
-      php7.0-curl \
-      php7.0-gd \
-      php7.0-common \
-      php7.0-intl \
-      php7.0-imap \
-      php7.0-mcrypt \
-      php7.0-sqlite \
-      php7.0-xmlrpc \
-      php7.0-xsl \
-      php7.0-mbstring \
-      php7.0-xml \
-      php7.0-zip \
+      php7.2-fpm \
+      php7.2 \
+      php7.2-cli \
+      php7.2-mysql \
+      php7.2-curl \
+      php7.2-gd \
+      php7.2-common \
+      php7.2-imap \
+      php7.2-sqlite3 \
+      php7.2-mbstring \
+      php7.2-xml \
+      php7.2-zip \
       curl \
       nano \
       git \
@@ -43,13 +45,13 @@ ADD config/apache/apache-vhosts.conf /etc/apache2/sites-enabled/000-default.conf
 ADD config/apache/apache2.conf /etc/apache2/apache2.conf
 
 # Update php.ini
-ADD config/php/php.conf /etc/php/7.0/apache2/php.ini
+ADD config/php/php7.2.conf /etc/php/7.2/apache2/php.ini
 
 # Enable php fpm
-RUN cd /etc/apache2/conf-available/ && a2enconf php7.0-fpm.conf
+RUN cd /etc/apache2/conf-available/ && a2enconf php7.2-fpm.conf
 
 RUN service apache2 restart
-RUN service php7.0-fpm start
+RUN service php7.2-fpm start
 
 RUN chown -R www-data:www-data /var/www
 
